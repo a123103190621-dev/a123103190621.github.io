@@ -6,354 +6,325 @@
     <title>笨兔子和小熊猫的恋爱记账本</title>
     <style>
         :root {
-            --primary-color: #f8bbd0; /* 浅粉色 */
-            --secondary-color: #bbdefb; /* 浅蓝色 */
-            --accent-color: #64b5f6;
+            --primary-color: #f8bbd0;
+            --secondary-color: #bbdefb;
+            --bg-color: #f5f5f5;
             --text-color: #333;
             --light-text: #666;
-            --bg-color: #f5f5f5;
-            --card-color: #fff;
-            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --income-color: #4caf50;
+            --expense-color: #f44336;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            line-height: 1.6;
+            min-height: 100vh;
             position: relative;
             overflow-x: hidden;
-            min-height: 100vh;
         }
 
-        .rain {
+        .rain-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
             z-index: -1;
+            pointer-events: none;
+            opacity: 0.1;
         }
 
         .drop {
             position: absolute;
             width: 1px;
             height: 20px;
-            background: linear-gradient(to bottom, rgba(200, 200, 255, 0.3), rgba(200, 200, 255, 0.1));
+            background: linear-gradient(to bottom, rgba(200, 200, 255, 0.8), rgba(200, 200, 255, 0.2));
             animation: rain linear infinite;
         }
 
         @keyframes rain {
-            to {
+            0% {
+                transform: translateY(-100vh);
+            }
+            100% {
                 transform: translateY(100vh);
             }
         }
 
         .container {
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
             padding: 20px;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .profile {
-            display: flex;
-            align-items: center;
-        }
-
-        .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            cursor: pointer;
-            border: 2px solid var(--secondary-color);
-            transition: transform 0.3s;
-        }
-
-        .avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .title {
-            text-align: center;
-            margin-bottom: 20px;
-            color: var(--text-color);
-        }
-
-        .title h1 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
-
-        .title input {
-            font-size: 1.5rem;
-            text-align: center;
-            border: none;
-            background: transparent;
-            color: var(--text-color);
-            width: 100%;
-            border-bottom: 1px dashed var(--light-text);
-            padding: 5px;
-        }
-
-        .tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            background-color: var(--card-color);
-            border: none;
-            outline: none;
-            font-size: 1rem;
-            transition: all 0.3s;
-            border-radius: 5px 5px 0 0;
-            margin-right: 5px;
-        }
-
-        .tab.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .ledger-selector {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .ledger-btn {
-            padding: 10px 20px;
-            margin: 0 10px;
-            border: none;
-            border-radius: 20px;
-            background-color: var(--secondary-color);
-            color: white;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .ledger-btn.active {
-            background-color: var(--primary-color);
-        }
-
-        .balance-display {
-            background-color: var(--card-color);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-            text-align: center;
-        }
-
-        .balance-display h3 {
-            margin-bottom: 10px;
-            color: var(--light-text);
-        }
-
-        .balance-amount {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--accent-color);
-        }
-
-        .form-container {
-            background-color: var(--card-color);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--light-text);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
-        .radio-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .radio-label {
-            display: inline-block;
-            padding: 8px 15px;
-            background-color: #f0f0f0;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .radio-input:checked + .radio-label {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .radio-input {
-            display: none;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-            width: 100%;
-        }
-
-        .btn:hover {
-            background-color: #42a5f5;
-        }
-
-        .transaction-list {
-            background-color: var(--card-color);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .transaction-item {
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .transaction-item:last-child {
-            border-bottom: none;
-        }
-
-        .transaction-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-
-        .transaction-amount {
-            font-weight: bold;
-        }
-
-        .transaction-amount.income {
-            color: #4caf50;
-        }
-
-        .transaction-amount.expense {
-            color: #f44336;
-        }
-
-        .transaction-category {
-            display: inline-block;
-            padding: 3px 8px;
-            background-color: #e0e0e0;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            margin-right: 5px;
-        }
-
-        .transaction-account {
-            font-size: 0.9rem;
-            color: var(--light-text);
-        }
-
-        .transaction-comment {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #f5f5f5;
-            border-radius: 5px;
             position: relative;
         }
 
-        .comment-author {
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .app-title {
+            font-size: 18px;
             font-weight: bold;
-            color: var(--accent-color);
+            color: var(--text-color);
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid var(--primary-color);
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-upload {
+            display: none;
+        }
+
+        .account-switcher {
+            display: flex;
+            margin-bottom: 20px;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+
+        .account-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .account-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .balance-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            text-align: center;
+        }
+
+        .balance-title {
+            font-size: 14px;
+            color: var(--light-text);
             margin-bottom: 5px;
         }
 
-        .transaction-time {
-            font-size: 0.8rem;
+        .balance-amount {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .balance-detail {
+            display: flex;
+            justify-content: space-around;
+            font-size: 14px;
+            color: var(--light-text);
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .detail-value.income {
+            color: var(--income-color);
+        }
+
+        .detail-value.expense {
+            color: var(--expense-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+
+        .income-button {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .expense-button {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .action-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .time-filter {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .filter-button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: white;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 1px 3px var(--shadow-color);
+        }
+
+        .filter-button.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .records-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            margin-bottom: 20px;
+        }
+
+        .record-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .record-item:last-child {
+            border-bottom: none;
+        }
+
+        .record-left {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .record-category {
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .category-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+
+        .record-account {
+            font-size: 12px;
+            color: var(--light-text);
+            margin-bottom: 5px;
+        }
+
+        .record-comment {
+            font-size: 13px;
+            color: var(--light-text);
+            font-style: italic;
+            margin-top: 5px;
+            padding: 5px 8px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .record-comment-author {
+            font-weight: bold;
+            color: #e91e63;
+        }
+
+        .record-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .record-amount.income {
+            color: var(--income-color);
+            font-weight: bold;
+        }
+
+        .record-amount.expense {
+            color: var(--expense-color);
+            font-weight: bold;
+        }
+
+        .record-date {
+            font-size: 12px;
             color: var(--light-text);
             margin-top: 5px;
         }
 
-        .delete-btn {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 3px 8px;
-            font-size: 0.8rem;
-            cursor: pointer;
+        .record-delete {
+            color: var(--light-text);
+            font-size: 12px;
             margin-top: 5px;
-        }
-
-        .filter-buttons {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
-            gap: 10px;
-        }
-
-        .filter-btn {
-            padding: 5px 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: white;
             cursor: pointer;
+            text-decoration: underline;
         }
 
-        .filter-btn.active {
-            background-color: var(--secondary-color);
-            color: white;
-            border-color: var(--secondary-color);
+        .record-delete:hover {
+            color: var(--expense-color);
+        }
+
+        .no-records {
+            text-align: center;
+            padding: 20px;
+            color: var(--light-text);
+            font-size: 14px;
         }
 
         .modal {
@@ -371,241 +342,314 @@
 
         .modal-content {
             background-color: white;
-            padding: 20px;
             border-radius: 10px;
-            max-width: 90%;
-            max-height: 90%;
-            overflow: auto;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
         }
 
-        .close-btn {
+        .modal-close {
             position: absolute;
             top: 10px;
             right: 10px;
-            font-size: 1.5rem;
+            font-size: 20px;
             cursor: pointer;
+            color: var(--light-text);
         }
 
-        .avatar-upload {
-            margin-top: 20px;
+        .modal-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
         }
 
-        @media (max-width: 480px) {
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: var(--light-text);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: white;
+        }
+
+        .form-radio-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .form-radio {
+            display: none;
+        }
+
+        .form-radio-label {
+            flex: 1;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-radio:checked + .form-radio-label {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .category-tag {
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-tag.selected {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .avatar-modal-content {
+            text-align: center;
+        }
+
+        .avatar-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 15px auto;
+            border: 3px solid var(--primary-color);
+        }
+
+        .avatar-upload-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .settings-modal-content {
+            text-align: center;
+        }
+
+        .settings-input {
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 400px) {
             .container {
-                padding: 10px;
+                padding: 15px;
             }
             
-            .title h1 {
-                font-size: 1.3rem;
+            .action-buttons {
+                flex-direction: column;
             }
             
-            .tab {
-                padding: 8px 15px;
-                font-size: 0.9rem;
+            .time-filter {
+                flex-wrap: wrap;
+                gap: 5px;
             }
             
-            .ledger-btn {
-                padding: 8px 15px;
-                font-size: 0.9rem;
-            }
-            
-            .balance-amount {
-                font-size: 1.5rem;
+            .filter-button {
+                flex: 1;
+                min-width: 30%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="rain" id="rain"></div>
+    <div class="rain-background" id="rainBackground"></div>
     
     <div class="container">
-        <header>
-            <div class="profile">
-                <img id="user-avatar" src="https://via.placeholder.com/50" alt="头像" class="avatar">
+        <div class="header">
+            <div class="app-title" id="appTitle">笨兔子和小熊猫的恋爱记账本</div>
+            <div class="avatar-container" id="avatarContainer">
+                <img src="https://via.placeholder.com/40" alt="Avatar" class="avatar" id="avatar">
+                <input type="file" id="avatarUpload" class="avatar-upload" accept="image/*">
             </div>
-        </header>
-        
-        <div class="title">
-            <h1><input type="text" id="ledger-name" value="笨兔子和小熊猫的恋爱记账本"></h1>
         </div>
         
-        <div class="tabs">
-            <button class="tab active" data-tab="record">记账</button>
-            <button class="tab" data-tab="history">记录</button>
-            <button class="tab" data-tab="stats">统计</button>
+        <div class="account-switcher">
+            <div class="account-tab active" data-account="love">和凌肖的恋爱小荷包</div>
+            <div class="account-tab" data-account="daily">日常开销</div>
         </div>
         
-        <div class="tab-content active" id="record-tab">
-            <div class="ledger-selector">
-                <button class="ledger-btn active" data-ledger="love">和凌肖的恋爱小荷包</button>
-                <button class="ledger-btn" data-ledger="daily">日常开销</button>
+        <div class="balance-container">
+            <div class="balance-title">当前余额</div>
+            <div class="balance-amount" id="balanceAmount">¥0.00</div>
+            <div class="balance-detail">
+                <div class="detail-item">
+                    <div class="detail-label">总收入</div>
+                    <div class="detail-value income" id="totalIncome">¥0.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">总支出</div>
+                    <div class="detail-value expense" id="totalExpense">¥0.00</div>
+                </div>
             </div>
-            
-            <div class="balance-display">
-                <h3>当前存款余额</h3>
-                <div class="balance-amount" id="current-balance">¥0.00</div>
-            </div>
-            
-            <div class="form-container">
+        </div>
+        
+        <div class="action-buttons">
+            <button class="action-button income-button" id="incomeButton">存钱</button>
+            <button class="action-button expense-button" id="expenseButton">花钱</button>
+        </div>
+        
+        <div class="time-filter">
+            <button class="filter-button active" data-filter="all">全部</button>
+            <button class="filter-button" data-filter="week">本周</button>
+            <button class="filter-button" data-filter="month">本月</button>
+            <button class="filter-button" data-filter="year">今年</button>
+        </div>
+        
+        <div class="records-container" id="recordsContainer">
+            <div class="no-records">暂无记录，点击上方按钮添加</div>
+        </div>
+    </div>
+    
+    <!-- 收入/支出模态框 -->
+    <div class="modal" id="recordModal">
+        <div class="modal-content">
+            <span class="modal-close" id="modalClose">&times;</span>
+            <div class="modal-title" id="modalTitle">添加记录</div>
+            <form id="recordForm">
+                <input type="hidden" id="recordId">
+                <input type="hidden" id="recordType">
+                
                 <div class="form-group">
-                    <label for="transaction-type">类型</label>
-                    <select id="transaction-type" class="form-control">
-                        <option value="deposit">存钱</option>
-                        <option value="expense">花钱</option>
-                    </select>
+                    <label for="recordAmount" class="form-label">金额</label>
+                    <input type="number" id="recordAmount" class="form-input" placeholder="输入金额" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="account-type">账户</label>
-                    <select id="account-type" class="form-control">
+                    <label for="recordAccount" class="form-label">账户</label>
+                    <select id="recordAccount" class="form-select" required>
+                        <option value="">选择账户</option>
                         <option value="微信">微信</option>
                         <option value="支付宝">支付宝</option>
                         <option value="银行卡">银行卡</option>
                     </select>
                 </div>
                 
-                <div class="form-group">
-                    <label for="amount">金额</label>
-                    <input type="number" id="amount" class="form-control" placeholder="输入金额">
-                </div>
-                
-                <div class="form-group" id="category-group">
-                    <label>分类</label>
-                    <div class="radio-group" id="category-options">
-                        <input type="radio" name="category" id="category-snack" value="零食" class="radio-input" checked>
-                        <label for="category-snack" class="radio-label">零食</label>
-                        
-                        <input type="radio" name="category" id="category-clothes" value="衣服" class="radio-input">
-                        <label for="category-clothes" class="radio-label">衣服</label>
-                        
-                        <input type="radio" name="category" id="category-transport" value="交通" class="radio-input">
-                        <label for="category-transport" class="radio-label">交通</label>
-                        
-                        <input type="radio" name="category" id="category-travel" value="旅行" class="radio-input">
-                        <label for="category-travel" class="radio-label">旅行</label>
-                        
-                        <input type="radio" name="category" id="category-phone" value="话费网费" class="radio-input">
-                        <label for="category-phone" class="radio-label">话费网费</label>
-                        
-                        <input type="radio" name="category" id="category-study" value="学习" class="radio-input">
-                        <label for="category-study" class="radio-label">学习</label>
-                        
-                        <input type="radio" name="category" id="category-daily" value="日用品" class="radio-input">
-                        <label for="category-daily" class="radio-label">日用品</label>
-                        
-                        <input type="radio" name="category" id="category-beauty" value="美妆" class="radio-input">
-                        <label for="category-beauty" class="radio-label">美妆</label>
-                        
-                        <input type="radio" name="category" id="category-medical" value="医疗" class="radio-input">
-                        <label for="category-medical" class="radio-label">医疗</label>
-                        
-                        <input type="radio" name="category" id="category-entertainment" value="娱乐" class="radio-input">
-                        <label for="category-entertainment" class="radio-label">娱乐</label>
-                        
-                        <input type="radio" name="category" id="category-gifts" value="人情往来" class="radio-input">
-                        <label for="category-gifts" class="radio-label">人情往来</label>
-                        
-                        <input type="radio" name="category" id="category-sports" value="运动" class="radio-input">
-                        <label for="category-sports" class="radio-label">运动</label>
-                        
-                        <input type="radio" name="category" id="category-utilities" value="水电煤" class="radio-input">
-                        <label for="category-utilities" class="radio-label">水电煤</label>
-                        
-                        <input type="radio" name="category" id="category-other" value="其他" class="radio-input">
-                        <label for="category-other" class="radio-label">其他</label>
+                <div class="form-group" id="categoryGroup">
+                    <label class="form-label">分类</label>
+                    <div class="category-tags" id="categoryTags">
+                        <div class="category-tag" data-category="零食">零食</div>
+                        <div class="category-tag" data-category="衣服">衣服</div>
+                        <div class="category-tag" data-category="交通">交通</div>
+                        <div class="category-tag" data-category="旅行">旅行</div>
+                        <div class="category-tag" data-category="话费网费">话费网费</div>
+                        <div class="category-tag" data-category="学习">学习</div>
+                        <div class="category-tag" data-category="日用品">日用品</div>
+                        <div class="category-tag" data-category="美妆">美妆</div>
+                        <div class="category-tag" data-category="医疗">医疗</div>
+                        <div class="category-tag" data-category="娱乐">娱乐</div>
+                        <div class="category-tag" data-category="人情往来">人情往来</div>
+                        <div class="category-tag" data-category="运动">运动</div>
+                        <div class="category-tag" data-category="水电煤">水电煤</div>
+                        <div class="category-tag" data-category="其他">其他</div>
                     </div>
+                    <input type="hidden" id="recordCategory">
                 </div>
                 
                 <div class="form-group">
-                    <label for="note">备注</label>
-                    <input type="text" id="note" class="form-control" placeholder="可选备注">
+                    <label for="recordNote" class="form-label">备注</label>
+                    <input type="text" id="recordNote" class="form-input" placeholder="可选备注">
                 </div>
                 
-                <button id="submit-btn" class="btn">记录</button>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="history-tab">
-            <div class="ledger-selector">
-                <button class="ledger-btn active" data-ledger="love">和凌肖的恋爱小荷包</button>
-                <button class="ledger-btn" data-ledger="daily">日常开销</button>
-            </div>
-            
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">全部</button>
-                <button class="filter-btn" data-filter="week">本周</button>
-                <button class="filter-btn" data-filter="month">本月</button>
-                <button class="filter-btn" data-filter="year">今年</button>
-            </div>
-            
-            <div class="transaction-list" id="transaction-history">
-                <!-- 交易记录将在这里动态生成 -->
-                <p style="text-align: center; color: var(--light-text);">暂无记录</p>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="stats-tab">
-            <div class="ledger-selector">
-                <button class="ledger-btn active" data-ledger="love">和凌肖的恋爱小荷包</button>
-                <button class="ledger-btn" data-ledger="daily">日常开销</button>
-            </div>
-            
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">全部</button>
-                <button class="filter-btn" data-filter="week">本周</button>
-                <button class="filter-btn" data-filter="month">本月</button>
-                <button class="filter-btn" data-filter="year">今年</button>
-            </div>
-            
-            <div class="balance-display">
-                <h3>总存款</h3>
-                <div class="balance-amount" id="total-deposit">¥0.00</div>
-            </div>
-            
-            <div class="balance-display">
-                <h3>总支出</h3>
-                <div class="balance-amount" id="total-expense">¥0.00</div>
-            </div>
-            
-            <div class="balance-display">
-                <h3>当前余额</h3>
-                <div class="balance-amount" id="stats-balance">¥0.00</div>
-            </div>
-            
-            <div id="category-stats" style="background-color: var(--card-color); padding: 20px; border-radius: 10px; margin-top: 20px; box-shadow: var(--shadow);">
-                <h3 style="margin-bottom: 15px; text-align: center;">支出分类统计</h3>
-                <div id="category-chart">
-                    <p style="text-align: center; color: var(--light-text);">暂无支出数据</p>
-                </div>
-            </div>
+                <button type="submit" class="form-submit">确认</button>
+            </form>
         </div>
     </div>
     
-    <!-- 头像上传模态框 -->
-    <div class="modal" id="avatar-modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h3>更换头像</h3>
-            <img id="avatar-preview" src="https://via.placeholder.com/150" alt="头像预览" style="width: 150px; height: 150px; border-radius: 50%; display: block; margin: 0 auto 20px;">
-            <input type="file" id="avatar-upload" accept="image/*" class="form-control">
-            <button id="save-avatar-btn" class="btn" style="margin-top: 15px;">保存</button>
+    <!-- 头像模态框 -->
+    <div class="modal" id="avatarModal">
+        <div class="modal-content avatar-modal-content">
+            <span class="modal-close" id="avatarModalClose">&times;</span>
+            <div class="modal-title">我的头像</div>
+            <img src="https://via.placeholder.com/150" alt="Avatar Preview" class="avatar-preview" id="avatarPreview">
+            <label for="newAvatarUpload" class="avatar-upload-btn">更换头像</label>
+            <input type="file" id="newAvatarUpload" class="avatar-upload" accept="image/*">
         </div>
     </div>
     
-    <!-- 修改名称模态框 -->
-    <div class="modal" id="name-modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h3>修改昵称</h3>
+    <!-- 设置模态框 -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content settings-modal-content">
+            <span class="modal-close" id="settingsModalClose">&times;</span>
+            <div class="modal-title">设置</div>
+            
             <div class="form-group">
-                <label for="partner-name">凌肖的昵称</label>
-                <input type="text" id="partner-name" class="form-control" value="凌肖">
+                <label for="userNickname" class="form-label">你的昵称</label>
+                <input type="text" id="userNickname" class="form-input" placeholder="输入你的昵称">
             </div>
+            
             <div class="form-group">
-                <label for="user-name">你的昵称</label>
-                <input type="text" id="user-name" class="form-control" value="笨兔子">
+                <label for="partnerNickname" class="form-label">凌肖的昵称</label>
+                <input type="text" id="partnerNickname" class="form-input" placeholder="输入凌肖的昵称">
             </div>
-            <button id="save-name-btn" class="btn" style="margin-top: 15px;">保存</button>
+            
+            <div class="form-group">
+                <label for="loveAccountName" class="form-label">恋爱账本名称</label>
+                <input type="text" id="loveAccountName" class="form-input" placeholder="输入恋爱账本名称">
+            </div>
+            
+            <div class="form-group">
+                <label for="dailyAccountName" class="form-label">日常账本名称</label>
+                <input type="text" id="dailyAccountName" class="form-input" placeholder="输入日常账本名称">
+            </div>
+            
+            <button class="form-submit" id="saveSettings">保存设置</button>
         </div>
     </div>
     
@@ -724,575 +768,553 @@
             }
         };
 
-        // 全局变量
-        let currentLedger = 'love';
-        let transactions = [];
-        let usedComments = {
-            deposit: [],
-            expense: {}
+        // 应用状态
+        const state = {
+            currentAccount: 'love',
+            currentFilter: 'all',
+            records: [],
+            settings: {
+                userNickname: '笨兔子',
+                partnerNickname: '凌肖',
+                loveAccountName: '和凌肖的恋爱小荷包',
+                dailyAccountName: '日常开销',
+                avatar: ''
+            },
+            usedComments: {
+                deposit: [],
+                expense: {}
+            }
         };
-        
-        // 初始化使用的评论数组
+
+        // 初始化已使用的评论
         Object.keys(lingXiaoComments.expense).forEach(category => {
-            usedComments.expense[category] = [];
+            state.usedComments.expense[category] = [];
         });
 
         // DOM元素
-        const userAvatar = document.getElementById('user-avatar');
-        const avatarModal = document.getElementById('avatar-modal');
-        const avatarPreview = document.getElementById('avatar-preview');
-        const avatarUpload = document.getElementById('avatar-upload');
-        const saveAvatarBtn = document.getElementById('save-avatar-btn');
-        const closeAvatarModal = document.querySelector('#avatar-modal .close-btn');
-        const ledgerNameInput = document.getElementById('ledger-name');
-        const nameModal = document.getElementById('name-modal');
-        const partnerNameInput = document.getElementById('partner-name');
-        const userNameInput = document.getElementById('user-name');
-        const saveNameBtn = document.getElementById('save-name-btn');
-        const closeNameModal = document.querySelector('#name-modal .close-btn');
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const ledgerBtns = document.querySelectorAll('.ledger-btn');
-        const transactionType = document.getElementById('transaction-type');
-        const categoryGroup = document.getElementById('category-group');
-        const amountInput = document.getElementById('amount');
-        const noteInput = document.getElementById('note');
-        const submitBtn = document.getElementById('submit-btn');
-        const currentBalanceDisplay = document.getElementById('current-balance');
-        const transactionHistory = document.getElementById('transaction-history');
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const totalDepositDisplay = document.getElementById('total-deposit');
-        const totalExpenseDisplay = document.getElementById('total-expense');
-        const statsBalanceDisplay = document.getElementById('stats-balance');
-        const categoryChart = document.getElementById('category-chart');
+        const elements = {
+            appTitle: document.getElementById('appTitle'),
+            avatarContainer: document.getElementById('avatarContainer'),
+            avatar: document.getElementById('avatar'),
+            avatarUpload: document.getElementById('avatarUpload'),
+            accountTabs: document.querySelectorAll('.account-tab'),
+            balanceAmount: document.getElementById('balanceAmount'),
+            totalIncome: document.getElementById('totalIncome'),
+            totalExpense: document.getElementById('totalExpense'),
+            incomeButton: document.getElementById('incomeButton'),
+            expenseButton: document.getElementById('expenseButton'),
+            filterButtons: document.querySelectorAll('.filter-button'),
+            recordsContainer: document.getElementById('recordsContainer'),
+            recordModal: document.getElementById('recordModal'),
+            modalClose: document.getElementById('modalClose'),
+            modalTitle: document.getElementById('modalTitle'),
+            recordForm: document.getElementById('recordForm'),
+            recordId: document.getElementById('recordId'),
+            recordType: document.getElementById('recordType'),
+            recordAmount: document.getElementById('recordAmount'),
+            recordAccount: document.getElementById('recordAccount'),
+            categoryGroup: document.getElementById('categoryGroup'),
+            categoryTags: document.getElementById('categoryTags'),
+            recordCategory: document.getElementById('recordCategory'),
+            recordNote: document.getElementById('recordNote'),
+            avatarModal: document.getElementById('avatarModal'),
+            avatarModalClose: document.getElementById('avatarModalClose'),
+            avatarPreview: document.getElementById('avatarPreview'),
+            newAvatarUpload: document.getElementById('newAvatarUpload'),
+            settingsModal: document.getElementById('settingsModal'),
+            settingsModalClose: document.getElementById('settingsModalClose'),
+            userNickname: document.getElementById('userNickname'),
+            partnerNickname: document.getElementById('partnerNickname'),
+            loveAccountName: document.getElementById('loveAccountName'),
+            dailyAccountName: document.getElementById('dailyAccountName'),
+            saveSettings: document.getElementById('saveSettings')
+        };
 
-        // 初始化
-        document.addEventListener('DOMContentLoaded', () => {
+        // 初始化应用
+        function initApp() {
+            loadSettings();
+            loadRecords();
+            renderUI();
             createRain();
-            loadData();
-            updateBalance();
-            renderTransactions();
-            updateStats();
-            
-            // 初始化账本名称
-            const savedLedgerName = localStorage.getItem('ledgerName');
-            if (savedLedgerName) {
-                ledgerNameInput.value = savedLedgerName;
-            }
-            
-            // 初始化昵称
-            const savedPartnerName = localStorage.getItem('partnerName') || '凌肖';
-            const savedUserName = localStorage.getItem('userName') || '笨兔子';
-            partnerNameInput.value = savedPartnerName;
-            userNameInput.value = savedUserName;
-            
-            // 初始化头像
-            const savedAvatar = localStorage.getItem('userAvatar');
-            if (savedAvatar) {
-                userAvatar.src = savedAvatar;
-                avatarPreview.src = savedAvatar;
-            }
-        });
+            setupEventListeners();
+        }
 
-        // 创建雨滴效果
+        // 加载设置
+        function loadSettings() {
+            const savedSettings = localStorage.getItem('accountBookSettings');
+            if (savedSettings) {
+                state.settings = JSON.parse(savedSettings);
+            }
+            
+            // 更新UI
+            elements.userNickname.value = state.settings.userNickname;
+            elements.partnerNickname.value = state.settings.partnerNickname;
+            elements.loveAccountName.value = state.settings.loveAccountName;
+            elements.dailyAccountName.value = state.settings.dailyAccountName;
+            
+            // 更新账本名称
+            document.querySelector('.account-tab[data-account="love"]').textContent = state.settings.loveAccountName;
+            document.querySelector('.account-tab[data-account="daily"]').textContent = state.settings.dailyAccountName;
+            
+            // 更新头像
+            if (state.settings.avatar) {
+                elements.avatar.src = state.settings.avatar;
+                elements.avatarPreview.src = state.settings.avatar;
+            }
+        }
+
+        // 保存设置
+        function saveSettings() {
+            state.settings.userNickname = elements.userNickname.value;
+            state.settings.partnerNickname = elements.partnerNickname.value;
+            state.settings.loveAccountName = elements.loveAccountName.value;
+            state.settings.dailyAccountName = elements.dailyAccountName.value;
+            
+            localStorage.setItem('accountBookSettings', JSON.stringify(state.settings));
+            
+            // 更新UI
+            document.querySelector('.account-tab[data-account="love"]').textContent = state.settings.loveAccountName;
+            document.querySelector('.account-tab[data-account="daily"]').textContent = state.settings.dailyAccountName;
+            
+            closeModal('settingsModal');
+        }
+
+        // 加载记录
+        function loadRecords() {
+            const savedRecords = localStorage.getItem('accountBookRecords');
+            if (savedRecords) {
+                state.records = JSON.parse(savedRecords);
+            }
+        }
+
+        // 保存记录
+        function saveRecords() {
+            localStorage.setItem('accountBookRecords', JSON.stringify(state.records));
+        }
+
+        // 创建下雨效果
         function createRain() {
-            const rainContainer = document.getElementById('rain');
-            for (let i = 0; i < 50; i++) {
+            const rainContainer = document.getElementById('rainBackground');
+            const dropCount = Math.floor(window.innerWidth / 10);
+            
+            for (let i = 0; i < dropCount; i++) {
                 const drop = document.createElement('div');
                 drop.className = 'drop';
-                drop.style.left = Math.random() * 100 + 'vw';
-                drop.style.top = Math.random() * -100 + 'vh';
-                drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
-                drop.style.animationDelay = Math.random() * 2 + 's';
-                drop.style.opacity = Math.random() * 0.5 + 0.3;
+                
+                // 随机位置和动画延迟
+                drop.style.left = `${Math.random() * 100}%`;
+                drop.style.animationDelay = `${Math.random() * 2}s`;
+                drop.style.animationDuration = `${0.5 + Math.random() * 1.5}s`;
+                drop.style.height = `${10 + Math.random() * 20}px`;
+                drop.style.opacity = `${0.1 + Math.random() * 0.3}`;
+                
                 rainContainer.appendChild(drop);
             }
         }
 
-        // 加载数据
-        function loadData() {
-            const savedTransactions = localStorage.getItem('transactions');
-            if (savedTransactions) {
-                transactions = JSON.parse(savedTransactions);
-            }
-            
-            const savedUsedComments = localStorage.getItem('usedComments');
-            if (savedUsedComments) {
-                usedComments = JSON.parse(savedUsedComments);
-            }
-        }
-
-        // 保存数据
-        function saveData() {
-            localStorage.setItem('transactions', JSON.stringify(transactions));
-            localStorage.setItem('usedComments', JSON.stringify(usedComments));
-        }
-
-        // 更新余额显示
-        function updateBalance() {
-            const ledgerTransactions = transactions.filter(t => t.ledger === currentLedger);
-            const balance = ledgerTransactions.reduce((total, t) => {
-                return t.type === 'deposit' ? total + t.amount : total - t.amount;
-            }, 0);
-            
-            currentBalanceDisplay.textContent = `¥${balance.toFixed(2)}`;
-        }
-
-        // 渲染交易记录
-        function renderTransactions(filter = 'all') {
-            let ledgerTransactions = transactions.filter(t => t.ledger === currentLedger);
-            
-            // 应用时间筛选
-            if (filter !== 'all') {
-                const now = new Date();
-                let startDate;
-                
-                if (filter === 'week') {
-                    startDate = new Date(now.setDate(now.getDate() - now.getDay()));
-                } else if (filter === 'month') {
-                    startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-                } else if (filter === 'year') {
-                    startDate = new Date(now.getFullYear(), 0, 1);
-                }
-                
-                ledgerTransactions = ledgerTransactions.filter(t => {
-                    const transactionDate = new Date(t.timestamp);
-                    return transactionDate >= startDate;
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 账本切换
+            elements.accountTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    elements.accountTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    state.currentAccount = tab.dataset.account;
+                    renderUI();
                 });
-            }
+            });
             
-            if (ledgerTransactions.length === 0) {
-                transactionHistory.innerHTML = '<p style="text-align: center; color: var(--light-text);">暂无记录</p>';
-                return;
-            }
-            
-            // 按时间降序排序
-            ledgerTransactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            
-            transactionHistory.innerHTML = '';
-            
-            ledgerTransactions.forEach(transaction => {
-                const transactionItem = document.createElement('div');
-                transactionItem.className = 'transaction-item';
-                
-                const transactionHeader = document.createElement('div');
-                transactionHeader.className = 'transaction-header';
-                
-                const categorySpan = document.createElement('span');
-                categorySpan.className = 'transaction-category';
-                categorySpan.textContent = transaction.category || '存款';
-                
-                const accountSpan = document.createElement('span');
-                accountSpan.className = 'transaction-account';
-                accountSpan.textContent = transaction.account;
-                
-                const amountSpan = document.createElement('span');
-                amountSpan.className = `transaction-amount ${transaction.type}`;
-                amountSpan.textContent = transaction.type === 'deposit' ? `+¥${transaction.amount.toFixed(2)}` : `-¥${transaction.amount.toFixed(2)}`;
-                
-                transactionHeader.appendChild(categorySpan);
-                transactionHeader.appendChild(accountSpan);
-                transactionHeader.appendChild(amountSpan);
-                
-                const noteDiv = document.createElement('div');
-                noteDiv.textContent = transaction.note || '';
-                
-                const timeDiv = document.createElement('div');
-                timeDiv.className = 'transaction-time';
-                timeDiv.textContent = formatDate(transaction.timestamp);
-                
-                transactionItem.appendChild(transactionHeader);
-                if (transaction.note) transactionItem.appendChild(noteDiv);
-                
-                if (transaction.comment) {
-                    const commentDiv = document.createElement('div');
-                    commentDiv.className = 'transaction-comment';
-                    
-                    const authorSpan = document.createElement('div');
-                    authorSpan.className = 'comment-author';
-                    authorSpan.textContent = `${localStorage.getItem('partnerName') || '凌肖'}:`;
-                    
-                    const commentText = document.createElement('div');
-                    commentText.textContent = transaction.comment;
-                    
-                    commentDiv.appendChild(authorSpan);
-                    commentDiv.appendChild(commentText);
-                    transactionItem.appendChild(commentDiv);
-                }
-                
-                transactionItem.appendChild(timeDiv);
-                
-                // 添加删除按钮
-                const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'delete-btn';
-                deleteBtn.textContent = '删除';
-                deleteBtn.addEventListener('click', () => {
-                    deleteTransaction(transaction.id);
+            // 时间筛选
+            elements.filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    elements.filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    state.currentFilter = button.dataset.filter;
+                    renderRecords();
                 });
-                transactionItem.appendChild(deleteBtn);
-                
-                transactionHistory.appendChild(transactionItem);
+            });
+            
+            // 收入/支出按钮
+            elements.incomeButton.addEventListener('click', () => openRecordModal('income'));
+            elements.expenseButton.addEventListener('click', () => openRecordModal('expense'));
+            
+            // 模态框关闭
+            elements.modalClose.addEventListener('click', () => closeModal('recordModal'));
+            elements.avatarModalClose.addEventListener('click', () => closeModal('avatarModal'));
+            elements.settingsModalClose.addEventListener('click', () => closeModal('settingsModal'));
+            
+            // 表单提交
+            elements.recordForm.addEventListener('submit', handleRecordSubmit);
+            
+            // 分类标签选择
+            const tags = elements.categoryTags.querySelectorAll('.category-tag');
+            tags.forEach(tag => {
+                tag.addEventListener('click', () => {
+                    tags.forEach(t => t.classList.remove('selected'));
+                    tag.classList.add('selected');
+                    elements.recordCategory.value = tag.dataset.category;
+                });
+            });
+            
+            // 头像上传
+            elements.avatarContainer.addEventListener('click', () => openModal('avatarModal'));
+            elements.newAvatarUpload.addEventListener('change', handleAvatarUpload);
+            
+            // 设置保存
+            elements.saveSettings.addEventListener('click', saveSettings);
+            
+            // 长按标题打开设置
+            elements.appTitle.addEventListener('longpress', () => {
+                openModal('settingsModal');
+            });
+            
+            // 检测长按事件
+            let pressTimer;
+            elements.appTitle.addEventListener('mousedown', () => {
+                pressTimer = setTimeout(() => {
+                    openModal('settingsModal');
+                }, 1000);
+            });
+            
+            elements.appTitle.addEventListener('mouseup', () => {
+                clearTimeout(pressTimer);
+            });
+            
+            elements.appTitle.addEventListener('mouseleave', () => {
+                clearTimeout(pressTimer);
+            });
+            
+            // 触摸事件支持
+            elements.appTitle.addEventListener('touchstart', () => {
+                pressTimer = setTimeout(() => {
+                    openModal('settingsModal');
+                }, 1000);
+            });
+            
+            elements.appTitle.addEventListener('touchend', () => {
+                clearTimeout(pressTimer);
             });
         }
 
-        // 删除交易
-        function deleteTransaction(id) {
-            if (confirm('确定要删除这条记录吗？')) {
-                transactions = transactions.filter(t => t.id !== id);
-                saveData();
-                updateBalance();
-                renderTransactions();
-                updateStats();
-            }
+        // 打开模态框
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
         }
 
-        // 更新统计信息
-        function updateStats(filter = 'all') {
-            let ledgerTransactions = transactions.filter(t => t.ledger === currentLedger);
+        // 关闭模态框
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // 打开记录模态框
+        function openRecordModal(type) {
+            elements.recordForm.reset();
+            elements.recordId.value = '';
             
-            // 应用时间筛选
-            if (filter !== 'all') {
-                const now = new Date();
-                let startDate;
+            if (type === 'income') {
+                elements.modalTitle.textContent = '存钱';
+                elements.categoryGroup.style.display = 'none';
+                elements.recordType.value = 'income';
+            } else {
+                elements.modalTitle.textContent = '花钱';
+                elements.categoryGroup.style.display = 'block';
+                elements.recordType.value = 'expense';
                 
-                if (filter === 'week') {
-                    startDate = new Date(now.setDate(now.getDate() - now.getDay()));
-                } else if (filter === 'month') {
-                    startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-                } else if (filter === 'year') {
-                    startDate = new Date(now.getFullYear(), 0, 1);
-                }
-                
-                ledgerTransactions = ledgerTransactions.filter(t => {
-                    const transactionDate = new Date(t.timestamp);
-                    return transactionDate >= startDate;
-                });
+                // 重置分类选择
+                const tags = elements.categoryTags.querySelectorAll('.category-tag');
+                tags.forEach(tag => tag.classList.remove('selected'));
+                elements.recordCategory.value = '';
             }
             
-            const deposits = ledgerTransactions.filter(t => t.type === 'deposit');
-            const expenses = ledgerTransactions.filter(t => t.type === 'expense');
-            
-            const totalDeposit = deposits.reduce((total, t) => total + t.amount, 0);
-            const totalExpense = expenses.reduce((total, t) => total + t.amount, 0);
-            const balance = totalDeposit - totalExpense;
-            
-            totalDepositDisplay.textContent = `¥${totalDeposit.toFixed(2)}`;
-            totalExpenseDisplay.textContent = `¥${totalExpense.toFixed(2)}`;
-            statsBalanceDisplay.textContent = `¥${balance.toFixed(2)}`;
-            
-            // 更新分类统计
-            updateCategoryStats(expenses);
+            openModal('recordModal');
+            elements.recordAmount.focus();
         }
 
-        // 更新分类统计
-        function updateCategoryStats(expenses) {
-            if (expenses.length === 0) {
-                categoryChart.innerHTML = '<p style="text-align: center; color: var(--light-text);">暂无支出数据</p>';
-                return;
-            }
-            
-            // 按分类统计
-            const categoryStats = {};
-            expenses.forEach(expense => {
-                if (!categoryStats[expense.category]) {
-                    categoryStats[expense.category] = 0;
-                }
-                categoryStats[expense.category] += expense.amount;
-            });
-            
-            // 转换为数组并排序
-            const sortedCategories = Object.entries(categoryStats)
-                .map(([category, amount]) => ({ category, amount }))
-                .sort((a, b) => b.amount - a.amount);
-            
-            // 渲染统计图表
-            categoryChart.innerHTML = '';
-            
-            sortedCategories.forEach(item => {
-                const categoryItem = document.createElement('div');
-                categoryItem.style.marginBottom = '10px';
-                
-                const categoryName = document.createElement('div');
-                categoryName.style.display = 'flex';
-                categoryName.style.justifyContent = 'space-between';
-                categoryName.style.marginBottom = '5px';
-                
-                const nameSpan = document.createElement('span');
-                nameSpan.textContent = item.category;
-                
-                const amountSpan = document.createElement('span');
-                amountSpan.textContent = `¥${item.amount.toFixed(2)}`;
-                
-                categoryName.appendChild(nameSpan);
-                categoryName.appendChild(amountSpan);
-                
-                const progressBar = document.createElement('div');
-                progressBar.style.height = '10px';
-                progressBar.style.backgroundColor = '#e0e0e0';
-                progressBar.style.borderRadius = '5px';
-                progressBar.style.overflow = 'hidden';
-                
-                const progressFill = document.createElement('div');
-                progressFill.style.height = '100%';
-                progressFill.style.width = `${(item.amount / sortedCategories[0].amount) * 100}%`;
-                progressFill.style.backgroundColor = getCategoryColor(item.category);
-                
-                progressBar.appendChild(progressFill);
-                
-                categoryItem.appendChild(categoryName);
-                categoryItem.appendChild(progressBar);
-                
-                categoryChart.appendChild(categoryItem);
-            });
-        }
-
-        // 获取分类颜色
-        function getCategoryColor(category) {
-            const colors = {
-                '零食': '#FF9AA2',
-                '衣服': '#FFB7B2',
-                '交通': '#FFDAC1',
-                '旅行': '#E2F0CB',
-                '话费网费': '#B5EAD7',
-                '学习': '#C7CEEA',
-                '日用品': '#F8C8DC',
-                '美妆': '#D4A5A5',
-                '医疗': '#92C9B1',
-                '娱乐': '#A2D2FF',
-                '人情往来': '#CDB4DB',
-                '运动': '#FFC8DD',
-                '水电煤': '#BDE0FE',
-                '其他': '#A5A5A5'
-            };
-            
-            return colors[category] || '#A5A5A5';
-        }
-
-        // 格式化日期
-        function formatDate(timestamp) {
-            const date = new Date(timestamp);
-            return `${date.getFullYear()}-${padZero(date.getMonth() + 1)}-${padZero(date.getDate())} ${padZero(date.getHours())}:${padZero(date.getMinutes())}`;
-        }
-
-        // 补零
-        function padZero(num) {
-            return num < 10 ? `0${num}` : num;
-        }
-
-        // 获取随机评论
-        function getRandomComment(type, category = null) {
-            let comments = [];
-            
-            if (type === 'deposit') {
-                comments = lingXiaoComments.deposit.filter(c => !usedComments.deposit.includes(c));
-                
-                if (comments.length === 0) {
-                    // 如果所有评论都用过了，重置
-                    usedComments.deposit = [];
-                    comments = lingXiaoComments.deposit;
-                }
-            } else if (type === 'expense' && category) {
-                comments = lingXiaoComments.expense[category].filter(c => !usedComments.expense[category].includes(c));
-                
-                if (comments.length === 0) {
-                    // 如果所有评论都用过了，重置
-                    usedComments.expense[category] = [];
-                    comments = lingXiaoComments.expense[category];
-                }
-            }
-            
-            if (comments.length === 0) return null;
-            
-            const randomIndex = Math.floor(Math.random() * comments.length);
-            const selectedComment = comments[randomIndex];
-            
-            // 添加到已使用评论
-            if (type === 'deposit') {
-                usedComments.deposit.push(selectedComment);
-            } else if (type === 'expense' && category) {
-                usedComments.expense[category].push(selectedComment);
-            }
-            
-            return selectedComment;
-        }
-
-        // 事件监听器
-        userAvatar.addEventListener('click', () => {
-            avatarModal.style.display = 'flex';
-        });
-
-        closeAvatarModal.addEventListener('click', () => {
-            avatarModal.style.display = 'none';
-        });
-
-        avatarUpload.addEventListener('change', (e) => {
+        // 处理头像上传
+        function handleAvatarUpload(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    avatarPreview.src = event.target.result;
+                    state.settings.avatar = event.target.result;
+                    elements.avatar.src = event.target.result;
+                    elements.avatarPreview.src = event.target.result;
+                    localStorage.setItem('accountBookSettings', JSON.stringify(state.settings));
                 };
                 reader.readAsDataURL(file);
             }
-        });
+        }
 
-        saveAvatarBtn.addEventListener('click', () => {
-            userAvatar.src = avatarPreview.src;
-            localStorage.setItem('userAvatar', avatarPreview.src);
-            avatarModal.style.display = 'none';
-        });
-
-        ledgerNameInput.addEventListener('change', () => {
-            localStorage.setItem('ledgerName', ledgerNameInput.value);
-        });
-
-        partnerNameInput.addEventListener('click', (e) => {
-            e.stopPropagation();
-            nameModal.style.display = 'flex';
-        });
-
-        userNameInput.addEventListener('click', (e) => {
-            e.stopPropagation();
-            nameModal.style.display = 'flex';
-        });
-
-        closeNameModal.addEventListener('click', () => {
-            nameModal.style.display = 'none';
-        });
-
-        saveNameBtn.addEventListener('click', () => {
-            localStorage.setItem('partnerName', partnerNameInput.value);
-            localStorage.setItem('userName', userNameInput.value);
-            nameModal.style.display = 'none';
-        });
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                
-                tabContents.forEach(content => content.classList.remove('active'));
-                document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
-                
-                if (tab.dataset.tab === 'stats') {
-                    updateStats();
-                }
-            });
-        });
-
-        ledgerBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                ledgerBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                currentLedger = btn.dataset.ledger;
-                updateBalance();
-                renderTransactions();
-                
-                // 获取当前激活的筛选按钮
-                const activeFilter = document.querySelector('.filter-buttons .filter-btn.active');
-                if (activeFilter) {
-                    updateStats(activeFilter.dataset.filter);
-                }
-            });
-        });
-
-        transactionType.addEventListener('change', () => {
-            if (transactionType.value === 'deposit') {
-                categoryGroup.style.display = 'none';
-            } else {
-                categoryGroup.style.display = 'block';
-            }
-        });
-
-        submitBtn.addEventListener('click', () => {
-            const amount = parseFloat(amountInput.value);
+        // 处理记录提交
+        function handleRecordSubmit(e) {
+            e.preventDefault();
+            
+            const amount = parseFloat(elements.recordAmount.value);
             if (isNaN(amount) || amount <= 0) {
                 alert('请输入有效的金额');
                 return;
             }
             
-            const type = transactionType.value;
-            const account = document.getElementById('account-type').value;
-            const note = noteInput.value;
-            let category = null;
-            let comment = null;
+            const account = elements.recordAccount.value;
+            if (!account) {
+                alert('请选择账户');
+                return;
+            }
+            
+            const type = elements.recordType.value;
+            const note = elements.recordNote.value;
             
             if (type === 'expense') {
-                const selectedCategory = document.querySelector('input[name="category"]:checked');
-                if (selectedCategory) {
-                    category = selectedCategory.value;
-                    comment = getRandomComment(type, category);
+                const category = elements.recordCategory.value;
+                if (!category) {
+                    alert('请选择分类');
+                    return;
                 }
+                
+                addRecord({
+                    id: elements.recordId.value || Date.now().toString(),
+                    type: 'expense',
+                    account,
+                    amount,
+                    category,
+                    note,
+                    accountType: state.currentAccount,
+                    date: new Date().toISOString()
+                });
             } else {
-                comment = getRandomComment('deposit');
+                addRecord({
+                    id: elements.recordId.value || Date.now().toString(),
+                    type: 'income',
+                    account,
+                    amount,
+                    note,
+                    accountType: state.currentAccount,
+                    date: new Date().toISOString()
+                });
             }
             
-            // 根据金额增加吐槽
-            if (amount > 200) {
-                if (comment) {
-                    comment += " 啧，买这么多，你这是把店搬空了？";
-                } else {
-                    comment = "啧，买这么多，你这是把店搬空了？";
-                }
-            } else if (amount < 10) {
-                const smallAmountComments = ["蚊子腿也是肉。", "啧，晚上去吃顿好的？"];
-                const randomSmallComment = smallAmountComments[Math.floor(Math.random() * smallAmountComments.length)];
-                
-                if (comment) {
-                    comment += ` ${randomSmallComment}`;
-                } else {
-                    comment = randomSmallComment;
-                }
-            }
-            
-            const newTransaction = {
-                id: Date.now().toString(),
-                ledger: currentLedger,
-                type,
-                amount,
-                account,
-                category,
-                note,
-                comment,
-                timestamp: new Date().toISOString()
-            };
-            
-            transactions.push(newTransaction);
-            saveData();
-            
-            // 重置表单
-            amountInput.value = '';
-            noteInput.value = '';
-            
-            updateBalance();
-            renderTransactions();
-            updateStats();
-        });
+            closeModal('recordModal');
+        }
 
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                renderTransactions(btn.dataset.filter);
-                
-                if (document.querySelector('.tab.active').dataset.tab === 'stats') {
-                    updateStats(btn.dataset.filter);
+        // 添加记录
+        function addRecord(record) {
+            // 如果是编辑现有记录，先删除旧记录
+            if (record.id && state.records.some(r => r.id === record.id)) {
+                state.records = state.records.filter(r => r.id !== record.id);
+            }
+            
+            // 添加凌肖的评论
+            if (record.accountType === 'love') {
+                if (record.type === 'income') {
+                    record.comment = getRandomComment('deposit');
+                } else {
+                    record.comment = getRandomComment('expense', record.category, record.amount);
                 }
+            }
+            
+            state.records.unshift(record);
+            saveRecords();
+            renderUI();
+        }
+
+        // 获取随机评论
+        function getRandomComment(type, category, amount) {
+            let comments = [];
+            let usedComments = [];
+            
+            if (type === 'deposit') {
+                comments = lingXiaoComments.deposit;
+                usedComments = state.usedComments.deposit;
+            } else if (type === 'expense' && category) {
+                comments = lingXiaoComments.expense[category] || [];
+                usedComments = state.usedComments.expense[category] || [];
+            }
+            
+            // 如果所有评论都已使用过，重置已使用列表
+            if (usedComments.length >= comments.length) {
+                if (type === 'deposit') {
+                    state.usedComments.deposit = [];
+                } else {
+                    state.usedComments.expense[category] = [];
+                }
+                usedComments = [];
+            }
+            
+            // 过滤掉已使用的评论
+            const availableComments = comments.filter(comment => !usedComments.includes(comment));
+            
+            // 随机选择一个评论
+            let selectedComment = availableComments[Math.floor(Math.random() * availableComments.length)];
+            
+            // 如果没有可用评论，随机选择一个
+            if (!selectedComment && comments.length > 0) {
+                selectedComment = comments[Math.floor(Math.random() * comments.length)];
+            }
+            
+            // 添加金额相关的评论
+            if (amount) {
+                if (amount > 200) {
+                    selectedComment += " 啧，买这么多，你这是把店搬空了？";
+                } else if (amount < 10) {
+                    selectedComment += " 蚊子腿也是肉。";
+                }
+            }
+            
+            // 记录已使用的评论
+            if (selectedComment) {
+                if (type === 'deposit') {
+                    state.usedComments.deposit.push(selectedComment);
+                } else {
+                    state.usedComments.expense[category].push(selectedComment);
+                }
+            }
+            
+            return selectedComment || "";
+        }
+
+        // 删除记录
+        function deleteRecord(id) {
+            if (confirm('确定要删除这条记录吗？')) {
+                state.records = state.records.filter(record => record.id !== id);
+                saveRecords();
+                renderUI();
+            }
+        }
+
+        // 渲染UI
+        function renderUI() {
+            // 更新按钮文本
+            if (state.currentAccount === 'love') {
+                elements.incomeButton.textContent = '存钱';
+                elements.expenseButton.textContent = '花钱';
+            } else {
+                elements.incomeButton.textContent = '收入';
+                elements.expenseButton.textContent = '支出';
+            }
+            
+            // 计算余额和总额
+            const currentRecords = state.records.filter(record => record.accountType === state.currentAccount);
+            const totalIncome = currentRecords
+                .filter(record => record.type === 'income')
+                .reduce((sum, record) => sum + record.amount, 0);
+            
+            const totalExpense = currentRecords
+                .filter(record => record.type === 'expense')
+                .reduce((sum, record) => sum + record.amount, 0);
+            
+            const balance = totalIncome - totalExpense;
+            
+            // 更新UI
+            elements.balanceAmount.textContent = `¥${balance.toFixed(2)}`;
+            elements.totalIncome.textContent = `¥${totalIncome.toFixed(2)}`;
+            elements.totalExpense.textContent = `¥${totalExpense.toFixed(2)}`;
+            
+            // 渲染记录
+            renderRecords();
+        }
+
+        // 渲染记录
+        function renderRecords() {
+            let filteredRecords = state.records.filter(record => record.accountType === state.currentAccount);
+            
+            // 应用时间筛选
+            const now = new Date();
+            switch (state.currentFilter) {
+                case 'week':
+                    const startOfWeek = new Date(now);
+                    startOfWeek.setDate(now.getDate() - now.getDay());
+                    startOfWeek.setHours(0, 0, 0, 0);
+                    filteredRecords = filteredRecords.filter(record => new Date(record.date) >= startOfWeek);
+                    break;
+                case 'month':
+                    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+                    filteredRecords = filteredRecords.filter(record => new Date(record.date) >= startOfMonth);
+                    break;
+                case 'year':
+                    const startOfYear = new Date(now.getFullYear(), 0, 1);
+                    filteredRecords = filteredRecords.filter(record => new Date(record.date) >= startOfYear);
+                    break;
+            }
+            
+            // 清空容器
+            elements.recordsContainer.innerHTML = '';
+            
+            if (filteredRecords.length === 0) {
+                elements.recordsContainer.innerHTML = '<div class="no-records">暂无记录，点击上方按钮添加</div>';
+                return;
+            }
+            
+            // 渲染记录
+            filteredRecords.forEach(record => {
+                const recordEl = document.createElement('div');
+                recordEl.className = 'record-item';
+                
+                // 分类图标和颜色
+                let categoryText = '';
+                let iconBgColor = '#9e9e9e';
+                
+                if (record.type === 'income') {
+                    categoryText = '存入';
+                    iconBgColor = '#4caf50';
+                } else {
+                    categoryText = record.category;
+                    // 为不同分类设置不同颜色
+                    const categoryColors = {
+                        零食: '#ff9800',
+                        衣服: '#e91e63',
+                        交通: '#2196f3',
+                        旅行: '#009688',
+                        话费网费: '#3f51b5',
+                        学习: '#795548',
+                        日用品: '#607d8b',
+                        美妆: '#ff4081',
+                        医疗: '#f44336',
+                        娱乐: '#9c27b0',
+                        人情往来: '#673ab7',
+                        运动: '#4caf50',
+                        水电煤: '#00bcd4',
+                        其他: '#9e9e9e'
+                    };
+                    iconBgColor = categoryColors[record.category] || '#9e9e9e';
+                }
+                
+                // 格式化日期
+                const recordDate = new Date(record.date);
+                const dateStr = recordDate.toLocaleDateString();
+                const timeStr = recordDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                // 构建记录HTML
+                recordEl.innerHTML = `
+                    <div class="record-left">
+                        <div class="record-category">
+                            <div class="category-icon" style="background-color: ${iconBgColor}">${categoryText.charAt(0)}</div>
+                            ${categoryText}
+                        </div>
+                        <div class="record-account">${record.account}</div>
+                        ${record.note ? `<div class="record-note">${record.note}</div>` : ''}
+                        ${record.comment ? `<div class="record-comment"><span class="record-comment-author">${state.settings.partnerNickname}:</span> ${record.comment}</div>` : ''}
+                    </div>
+                    <div class="record-right">
+                        <div class="record-amount ${record.type}">${record.type === 'income' ? '+' : '-'}¥${record.amount.toFixed(2)}</div>
+                        <div class="record-date">${dateStr} ${timeStr}</div>
+                        <div class="record-delete" data-id="${record.id}">删除</div>
+                    </div>
+                `;
+                
+                elements.recordsContainer.appendChild(recordEl);
             });
-        });
-
-        // 点击模态框外部关闭模态框
-        window.addEventListener('click', (e) => {
-            if (e.target === avatarModal) {
-                avatarModal.style.display = 'none';
-            }
             
-            if (e.target === nameModal) {
-                nameModal.style.display = 'none';
-            }
-        });
+            // 添加删除事件监听器
+            document.querySelectorAll('.record-delete').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteRecord(btn.dataset.id);
+                });
+            });
+        }
+
+        // 初始化应用
+        window.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
